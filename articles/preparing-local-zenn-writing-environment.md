@@ -174,5 +174,11 @@ https://zenn.dev/zenn/articles/deploy-github-images
 
 と書いてありました。このへんがベータ版ってことかな。ちゃんと表示されるか確認したいところですが、ローカルのプレビューで表示されてればきっと表示されるに違いないと信じて `published: true` でコミットしてプッシュ。
 
+・・・
 
+公開されました！画像も表示されてます！あとこのボタンがつきました。
+
+![propose-edit](/images/preparing-local-zenn-writing-environment/propose-edit.png)
+
+自分の記事に編集の提案が来る気はあまりしませんが、公式の記事に誤字とかあったときにさっと修正のリクエストがあげられたりすると便利かも。
 
