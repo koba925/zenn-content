@@ -1,0 +1,13 @@
+services:
+  zenn-content:
+    image: devcon_zenn-content:1.0
+    build: ./nodejs
+    container_name: 'devcon_zenn-content'
+    stdin_open: true
+    tty: true
+    working_dir: /workspaces/zenn-content
+    volumes:
+      - ..:/workspaces/zenn-content
+      - node_modules:/workspaces/zenn-content/node_modules
+volumes:
+  node_modules:
