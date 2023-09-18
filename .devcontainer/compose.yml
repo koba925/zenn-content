@@ -1,7 +1,10 @@
+volumes:
+  node_modules:
+
+
 services:
   zenn-content:
-    image: devcon_zenn-content:1.0
-    build: ./nodejs
+    image: mcr.microsoft.com/devcontainers/javascript-node:1-20-bullseye
     container_name: 'devcon_zenn-content'
     stdin_open: true
     tty: true
@@ -9,5 +12,3 @@ services:
     volumes:
       - ..:/workspaces/zenn-content
       - node_modules:/workspaces/zenn-content/node_modules
-volumes:
-  node_modules:
