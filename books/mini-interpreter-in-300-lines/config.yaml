@@ -1,0 +1,21 @@
+title: "300行くらいのPythonで小さいインタプリタを書く"
+summary: "300行くらいのPythonで小さいインタプリタを書く"
+topics: ["interpreter", "language"]
+published: false
+price: 0 
+# 本に含めるチャプターを順番に並べましょう
+chapters:
+  - introduction
+  - specification
+  - print
+  - scanner-parser-evaluator
+  - preparation
+  - expression
+  - boolean
+  - variable
+  - block
+  - control
+  - function
+  - conclusion
+  - interpreter-in-50-lines
+  - references
