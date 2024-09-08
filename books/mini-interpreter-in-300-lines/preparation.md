@@ -2,58 +2,76 @@
 title: "旅の準備"
 ---
 
+骨組みができて、これから機能を追加していくことになりますが、もう少しだけ準備します。
 
-## テスト
+## テストを実装する
 
-これから機能を追加していくことになります。機能を追加したら既存の機能が動かなくなった、ということがないようにテストを書いていきます。
+機能を追加したら既存の機能が動かなくなった、ということがないようにテストを書いていきます。
 
-複数回`print`することも出てきますのでリストに覚えておくようにします。
+print文を実行するたびに（Pythonの）`print()`で標準出力に書いてしまうと少しテストを書くのが面倒になりますので、print文を実行したその場では実際には`print()`せず、`output` [^public] という配列に覚えておくようにします。
+こうしておけば、テストでは単純に`output`が想定通りになっているか比較するだけで済みます。
+今回の変更は`Evaluator`とREPL部分だけで、`Scanner`・`Parser`はそのままです。
+
+[^public]: テストから参照できる必要があるのでパブリックな属性です。そのため先頭にアンダースコアがありません。
 
 ```diff py
  class Evaluator:
 +    def __init__(self):
-+        self._output = []
-+
-+    def clear_output(self): self._output = []
-+    def output(self): return self._output
-```
++        self.output = []
 
-```diff py
-     def evaluate(self, ast):
-         match ast:
+     def eval_program(self, program):
++        self.output = []
+         match program:
+             case ["program", *statements]:
+                 for statement in statements:
+                     self._eval_statement(statement)
+             case unexpected: assert False, f"Internal Error at `{unexpected}`."
+ 
+     def _eval_statement(self, statement):
+         match statement:
 -            case ["print", val]: print(val)
-+            case ["print", val]: self._output.append(val)
-             case _: assert False, "Internal Error."
++            case ["print", val]: self.output.append(val)
+             case unexpected: assert False, f"Internal Error at `{unexpected}`."
 ```
+
+REPLの方で、評価が終わってからまとめて`output`を`print()`します。
+テストファイルでimportされたときにREPLを実行してしまわないよう、REPLを`if __name__ == "__main__"`の下に入れています。
 
 ```diff py
-if __name__ == "__main__":
-    evaluator = Evaluator()
-    while source := "\n".join(iter(lambda: input(": "), "")):
-        try:
-            ast = Parser(source).parse_program()
-            print(ast)
-            evaluator.clear_output()
-            evaluator.eval_statement(ast)
-            print(*evaluator.output(), sep="\n")
-        except AssertionError as e: print(e)
+ import sys
++if __name__ == "__main__": 
+     evaluator = Evaluator()
+     while True:
+         print("Input source and enter Ctrl+D:")
+         if (source := sys.stdin.read()) == "": break
+ 
+         print("Output:")
+         try:
+             ast = Parser(source).parse_program()
+             print(ast)
+             evaluator.eval_program(ast)
++            print(*evaluator.output, sep="\n")
+         except AssertionError as e:
+            print("Error:", e)
 ```
 
-テスト（新規作成）
-
+次に、テスト用に`test_minilang.py`を作成します。
 Pythonについてくるunittestをフレームワークとして使います。
-シンプルですがminilangのテストには十分な機能を持ってます。
-ていうかフレームワークもいらないくらいなんですが、使っておくとvscodeの拡張機能が活用できて便利なので。
+シンプルですがminilangのテストには十分な機能を持ってます[^convenience]。
+
+[^convenience]: フレームワークもいらないくらいなんですが、使っておくとvscodeの拡張機能が活用できて便利なので。
 
 ```py
 import unittest
 
 from minilang import Parser, Evaluator
 
+def get_ast(source): return Parser(source).parse_program()
+
 def get_output(source):
     evaluator = Evaluator()
-    evaluator.evaluate(Parser(source).parse())
-    return evaluator.output()
+    evaluator.eval_program(Parser(source).parse_program())
+    return evaluator.output
 
 def get_error(source):
     try: output = get_output(source)
@@ -62,22 +80,39 @@ def get_error(source):
 
 class TestMinilang(unittest.TestCase):
     def test_print(self):
-        self.assertEqual(get_output("print 1;"), [1])
-        self.assertEqual(get_output("  print\n  12  ;\n  "), [12])
-        self.assertEqual(get_error("prin 1;"), "`print` expected, found `prin`.")
-        self.assertEqual(get_error("print a;"), "Number expected, found `a`.")
-        self.assertEqual(get_error("print 1:"), "Expected `;`, found `:`.")
-        self.assertEqual(get_error("print 1"), "Expected `;`, found `$EOF`.")
-        self.assertEqual(get_error("print 1;a"), "Expected `$EOF`, found `a`.")
+        self.assertEqual(get_ast(""), ["program"])
+        self.assertEqual(get_output(""), [])
 
-if __name__ == '__main__':
+        self.assertEqual(get_ast(" \t\n"), ["program"])
+        self.assertEqual(get_output(" \t\n"), [])
+
+        self.assertEqual(get_ast("print 123;"), ["program", ["print", 123]])
+        self.assertEqual(get_output("print 123;"), [123])
+
+        self.assertEqual(get_ast("print 5; print 6; print 7;"), \
+                         ["program", ["print", 5], ["print", 6], ["print", 7]])
+        self.assertEqual(get_output("print 5; print 6; print 7;"), [5, 6, 7])
+        self.assertEqual(get_output("  print  5  ;\n\tprint  6  ;  \n  print\n7\n\n ; \n"), [5, 6, 7])
+
+        self.assertEqual(get_error("prin 5;"), "Expected `print`, found `prin`.")
+        self.assertEqual(get_error("print a;"), "Expected number , found `a`.")
+        self.assertEqual(get_error("print 5:"), "Expected `;`, found `:`.")
+        self.assertEqual(get_error("print 5"), "Expected `;`, found `$EOF`.")
+        self.assertEqual(get_error("print 5; prin 6;"), "Expected `print`, found `prin`.")
+
+if __name__ == "__main__":
     unittest.main()
 ```
 
-数値の0とか1とかは何かのデフォルト値になってて意識せずにそういう値になってることもあるので避けてます。
+正しい入力ソースコードに対して正しい出力がされているか、入力ソースコードに誤りがあれば正しくエラーにしているか、という観点のテストが中心です。
+単体テスト的なことはあまり考えていません。
+多くの場合は出力またはエラーを確認すれば安心できるのですが、ときにはASTがどうなってるのか出力だけからは判断しづらいときもあるので、そういうときは想定通りのASTができているかテストするときもあります。
 
-テストはvscodeのテストエクスプローラで実施してもいいですし、unittestでやっても直接実行してもOKです。お好きなやり方で。
-テストファイルはひとつしか使わない予定です。
+数値で5とか6を使っているのは、0や1だと何か別の目的で使っていてたまたま成功してしまったり、結果を混同することがあるためです。
+
+テストはvscodeのテストエクスプローラで実施してもいいですし[^vscode-test]、unittestでやっても直接実行してもOKです。お好きなやり方で。
+
+[^vscode-test]: vscodeでちょっと修正してはテストする、を繰り返すには`Ctrl + :` `A`が便利です。
 
 ```
 $ python -m unittest
@@ -94,16 +129,140 @@ Ran 1 test in 0.000s
 OK
 ```
 
-ちょっと修正してはテストする、を繰り返すには`Ctrl + :` `A`が便利です。
+REPLから実行しても成功することを確認しておいてください。
 
+GitHub: [コード](https://github.com/koba925/minilang-book/blob/3010_test) [差分](https://github.com/koba925/minilang-book/compare/2020_parser_evaluator...3010_test)
 
-githubでは
+なお、（実行例に毛が生えた程度ですし）テストのコードは今後解説しません。
+気になったらGitHubをご参照ください。
 
-## 少しリファクタリング
+## 構文とプログラム・データの構造を一致させる
 
-テストもできたのでちょっとリファクタリングします。
+* <プログラム>は<文>が続いたもの
+* <文>は`print` <式> `;`という形をしたもの
+* <式>は<数>という形をしたもの
 
-文法の決めごととコードとの対応がより明確になるようにします。
-意外と機械的に書けていることにお気づきでしょう。
+という文法とソースコードとの対応が意外と機械的なものだな、と感じているひともいると思います。
+ここでは、文法とソースコードとの対応がより明確になるようにします。
+テストができたので安心してリファクタリングできます。
 
-すでに100行を超えてますが、まだ整数をprintすることしかできてません。
+実はREPLはもう完成で、`Scanner`もほとんど完成しているので、今後の修正箇所はほぼ`Parser`と`Evaluator`となります。
+ではまず`Parser`クラスから。
+
+<プログラム>を構文解析する`parse_program()`を「<プログラム>は<文>が続いたもの」に対応するように修正します。
+
+```diff py
+ class Parser:
+     ...
+
+     def parse_program(self):
+         program: list = ["program"]
+         while self._current_token != "$EOF":
+-            self._check_token("print")
+-            number = self._next_token()
+-            assert isinstance(number, int), f"Expected number , found `{number}`."
+-            self._next_token()
+-            self._consume_token(";")
+-            program.append(["print", number])
++            program.append(self._parse_statement())
+         return program
+```
+
+差分を見せるよりできあがりの方がわかりやすいですね。
+これだけです。
+
+```py
+    def parse_program(self):
+        program: list = ["program"]
+        while self._current_token != "$EOF":
+            program.append(self._parse_statement())
+        return program
+```
+
+<文>を扱うのが`_parse_statement()`なので、「<プログラム>は<文>が続いたもの」と読めると思います。
+
+次は以下の決まりを直訳したメソッドです。
+
+* <文>は`print` <式> `;`という形をしたもの
+* <式>は<数>という形をしたもの
+
+<文>、print、<式>、<数>をそれぞれひとつずつの関数で処理します。
+
+<文>は`statement`、`print`は`print`、<式>は`expression`と単純に英語にしていますが、<数>に当たる部分は`number`ではなく`primary`という言葉を当てています。
+現時点では`number`の方がふさわしいのですが、後ほどほかの要素も加わってきますので先回りさせてもらいました。
+primaryというのは「基本的な要素」くらいの意味にとらえていただければ。
+
+```diff py
++    def _parse_statement(self):
++        match self._current_token:
++            case "print": return self._parse_print()
++            case unexpected: assert False, f"Unexpected token `{unexpected}`."
++
++    def _parse_print(self):
++        self._next_token()
++        expr = self._parse_expression()
++        self._consume_token(";")
++        return ["print", expr]
++
++    def _parse_expression(self):
++        return self._parse_primary()
++
++    def _parse_primary(self):
++        match self._current_token:
++            case int(value):
++                self._next_token()
++                return value
++            case unexpected: assert False, f"Unexpected token `{unexpected}`."
+
+     def _consume_token(self, expected_token):
+```
+
+そのまんまやん！と思っていただけたら成功です。
+
+`Evaluator`の方も修正があります。
+print文の処理を、print文全体の処理と、print文に含まれる<式>の処理に分けます。
+これも文法にしたがった書き方への修正です。
+
+```diff py
+     def _eval_statement(self, statement):
+         match statement:
+-            case ["print", val]: self.output.append(val)
++            case ["print", expr]: self._eval_print(expr)
++            case unexpected: assert False, f"Internal Error at `{unexpected}`."
++
++    def _eval_print(self, expr):
++        self.output.append(self._eval_expr(expr))
++
++    def _eval_expr(self, expr):
++        match expr:
++            case int(value): return value
+             case unexpected: assert False, f"Internal Error at `{unexpected}`."
+ 
+ if __name__ == "__main__":
+```
+
+`-`が１行、`+`が９行ということで、１行で書けてた処理をあえて９行に書き直してるわけですが、これも文法に沿った書き方への修正です。
+将来への布石です。
+
+`case int(value):`は`value`がint型のときにマッチするパターンです。
+今はint型以外の値が入ってくることはありませんが、今後パターンが増えていきます。
+
+では、REPLやテストで正常に動くことを確認してください。
+
+安心してリファクタリングできますと言っておきながら、エラーメッセージが少し変わってしまうのでテストコードも修正しなくてはなりません。ご了承ください[^error-test]。
+
+[^error-test]: エラーのテストでどこまでチェックするかは悩ましいところです。
+シンプルに作るなら、エラーになることだけを確認するか、エラーメッセージまで完全に一致するかのどちらかになりますが、言語処理系のテストではバグがあってもたまたまエラーになるということが多そうなので、minilangのテストでは後者としました。
+エラーにコードをつけて、コードが一致していればOKとするようなやりかたも考えられますが、そこまではやりませんでした。
+今後もエラーのテストの修正がちょくちょく発生しますがご了承またはひと工夫をお願いします。
+
+ちゃんと動けば、機能追加の下準備はOKです！
+
+とはいうものの、いまだ数をprintすることしかできてないのに行が増えるばかりですでに100行を超えてます。
+ほんとうにちゃんとプログラミング言語になるんでしょうか。
+
+なります。
+ということは逆に言うと、あと250行程度でminilangの処理系ができてしまうということです。
+
+GitHub: [コード](https://github.com/koba925/minilang-book/blob/3020_grammartical_code) [差分](https://github.com/koba925/minilang-book/compare/3010_test...3020_grammartical_code)
+

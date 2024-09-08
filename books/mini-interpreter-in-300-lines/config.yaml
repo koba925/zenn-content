@@ -1,9 +1,8 @@
-title: "300行くらいのPythonで小さいインタプリタを書く"
-summary: "300行くらいのPythonで小さいインタプリタを書く"
-topics: ["interpreter", "language"]
+title: "350行くらいのPythonでインタプリタを書いてみる"
+summary: "プログラミング言語ってどうやって動いてるんだろう？おもしろそうだけどなんか難しそう、という方へ。ちょっとしたインタプリタを書く"
+topics: ["コンピュータサイエンス", "言語処理系", "プログラミング言語", "インタプリタ", "Computer Science", "Language Processor", "Programming Language", "Interpreter"]
 published: false
 price: 0 
-# 本に含めるチャプターを順番に並べましょう
 chapters:
   - introduction
   - specification
@@ -12,10 +11,13 @@ chapters:
   - preparation
   - expression
   - boolean
-  - variable
-  - block
+  - variable-scope
   - control
   - function
   - conclusion
   - interpreter-in-50-lines
   - references
+  - binary-search-tree
+  - interpreter-in-150-lines
+  - source
+  
