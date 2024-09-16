@@ -2,6 +2,8 @@
 title: "付録：全ソースコード"
 ---
 
+minilangの全ソースコードです。
+
 ```py
 class Scanner:
     def __init__(self, source) -> None:
