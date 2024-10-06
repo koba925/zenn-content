@@ -1,20 +1,6 @@
-title: "350行くらいのPythonでインタプリタを書いてみる"
+title: "350行くらいのコードでコンパクトだけどまあまあ普通なインタプリタを書いてみる"
 summary: "インタプリタとかコンパイラとかいわゆる言語処理系って中はどうなってるの？なんか面白そうだけど難しいんじゃ？と思っている方へ"
-topics: ["コンピュータサイエンス", "言語処理系", "インタプリタ", "computerscience", "Interpreter"]
+topics: ["computerscience", "language", "interpreter", "minilang"]
 published: false
 price: 0 
-chapters:
-  - introduction
-  - number-print
-  - scanner-parser-evaluator
-  - preparation
-  - expression
-  - boolean
-  - variable-scope
-  - control
-  - function
-  - conclusion
-  - references
-  - binary-search-tree
-  - source
-  
+toc_depth: 1
