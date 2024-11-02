@@ -6,7 +6,7 @@ topics: ["computerscience", "language", "interpreter", "python", "minilang"]
 published: true
 ---
 
-「[350行くらいのPythonで書くインタプリタ](https://zenn.dev/kb84tkhr/books/mini-interpreter-in-350-lines)」（以下「minilang本」）「[拡張のアイデア](https://zenn.dev/kb84tkhr/books/mini-interpreter-in-350-lines/viewer/conclusion#%E6%8B%A1%E5%BC%B5%E3%81%AE%E3%82%A2%E3%82%A4%E3%83%87%E3%82%A2)」にある宿題をやっていきます。順番は適当です。
+「[350行くらいのPythonで書くインタプリタ](https://zenn.dev/kb84tkhr/books/mini-interpreter-in-350-lines)」の「[拡張のアイデア](https://zenn.dev/kb84tkhr/books/mini-interpreter-in-350-lines/viewer/conclusion#%E6%8B%A1%E5%BC%B5%E3%81%AE%E3%82%A2%E3%82%A4%E3%83%87%E3%82%A2)」にある宿題をやっていきます。順番は適当です。
 
 解説は最小限で行きます。
 
