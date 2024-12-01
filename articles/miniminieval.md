@@ -8,6 +8,10 @@ published: true
 
 ※「[350行くらいのPythonで作るプログラミング言語実装超入門](https://zenn.dev/kb84tkhr/books/mini-interpreter-in-350-lines)」の関連記事で[minilangに辞書とオブジェクト（のような何か）を追加する](https://zenn.dev/kb84tkhr/articles/minilang_dict_object)の続きです。これまでの記事は[minilangの記事一覧 | Zenn](https://zenn.dev/topics/minilang)をご覧ください。
 
+※※ コードにおかしいところがあったので修正しました。
+* 変数名に`var`を使っていてキーワードとまる被りなので`name`に変更しました。動くけど（負け惜しみ
+* `eval(expr[2])`の前に`this.`がついてるべきでした。動くけ（略
+
 minilangにもいろいろ機能を追加して、テストは動いてるんだけれども複雑なコードを書いたときにほんとにちゃんと動くのか心配になってきたのでEvaluatorを書いてみました。
 
 数字、真偽値、set、var、if、inc（1を足す）、dec（1を引く）、zero?（0ならtrue）、無名関数、関数呼び出しだけです。サンプルコード。
@@ -81,18 +85,18 @@ def new(proto, prop) {
 
 ```
 var Environment = $[
-    define: func(this, var, val) {
-        set this._vals[var] = val;
+    define: func(this, name, val) {
+        set this._vals[name] = val;
     },
-    assign: func(this, var, val) {
-        if var % this._vals { set this._vals[var] = val; }
-        elif this._parent # null  { this._parent.assign(var, val); }
-        else { error(var + ' not defined.'); }
+    assign: func(this, name, val) {
+        if name % this._vals { set this._vals[name] = val; }
+        elif this._parent # null  { this._parent.assign(name, val); }
+        else { error(name + ' not defined.'); }
     },
-    get: func(this, var) {
-        if var % this._vals { return this._vals[var]; }
-        elif this._parent # null { return this._parent.get(var); }
-        else { error(var + ' not defined.'); }
+    get: func(this, name) {
+        if name % this._vals { return this._vals[name]; }
+        elif this._parent # null { return this._parent.get(name); }
+        else { error(name + ' not defined.'); }
     }
 ];
 def environment(parent) {
@@ -109,8 +113,8 @@ var Evaluator = $[
         if type(expr) = 'int' or type(expr) = 'bool' { return expr; }
         if type(expr) = 'str' { return this._env.get(expr); }
 
-        if expr[0] = 'var' { this._env.define(expr[1], eval(expr[2])); return; }
-        if expr[0] = 'set' { this._env.assign(expr[1], eval(expr[2])); return; }
+        if expr[0] = 'var' { this._env.define(expr[1], this.eval(expr[2])); return; }
+        if expr[0] = 'set' { this._env.assign(expr[1], this.eval(expr[2])); return; }
         if expr[0] = 'if' {
             if this.eval(expr[1]) {
                 return this.eval(expr[2]);
