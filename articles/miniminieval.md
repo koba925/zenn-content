@@ -9,7 +9,7 @@ published: true
 ※「[350行くらいのPythonで作るプログラミング言語実装超入門](https://zenn.dev/kb84tkhr/books/mini-interpreter-in-350-lines)」の関連記事で[minilangに辞書とオブジェクト（のような何か）を追加する](https://zenn.dev/kb84tkhr/articles/minilang_dict_object)の続きです。これまでの記事は[minilangの記事一覧 | Zenn](https://zenn.dev/topics/minilang)をご覧ください。
 
 ※※ コードにおかしいところがあったので修正しました。
-・変数名に`var`を使っていてキーワードとまる被りでした。動くけど（負け惜しみ
+・変数名に`var`を使っていてキーワードとまる被りなので`name`に変更しました。動くけど（負け惜しみ
 ・`eval(expr[2])`の前に`this.`がついてるべきでした。動くけ（略
 
 minilangにもいろいろ機能を追加して、テストは動いてるんだけれども複雑なコードを書いたときにほんとにちゃんと動くのか心配になってきたのでEvaluatorを書いてみました。
