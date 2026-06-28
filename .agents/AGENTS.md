@@ -2,6 +2,16 @@
 
 このプロジェクト（zenn-content/books/learning-by-growing-language）の原稿をレビューする際は、以下の観点とルールを厳格に守ってフィードバックを行ってください。
 
+## 基礎知識
+
+* Zenn CLI 利用方法:https://zenn.dev/zenn/articles/zenn-cli-guide
+* Zenn の Markdown 記法 https://zenn.dev/zenn/articles/markdown-guide
+* 執筆中の内容や設定:/home/takahiro/projects/zenn-content/books/learning-by-growing-language
+* Toil 言語処理系のソースコード:/home/takahiro/projects/toil
+* サンプルコード https://github.com/koba925/toil-book
+  * 節ごとのソースを参照できるようタグを打っています。
+    例： https://github.com/koba925/toil-book/tree/0101_constants
+
 ## 0. 基本
 
 - 技術的な誤りがないこと。
