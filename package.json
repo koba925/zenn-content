@@ -19,5 +19,9 @@
   "homepage": "https://github.com/koba925/zenn-content#readme",
   "dependencies": {
     "zenn-cli": "^0.5.2"
+  },
+  "devDependencies": {
+    "textlint": "^15.7.1",
+    "textlint-rule-preset-ja-spacing": "^3.0.2"
   }
 }
