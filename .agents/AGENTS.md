@@ -1,7 +1,12 @@
 # Toil言語チュートリアル本 レビューガイドライン
 
-このプロジェクト（zenn-content/books/learning-by-growing-language）の原稿をレビューする際は、以下の観点とルールを厳格に守り、批判的な目で確認してフィードバックを行ってください。
-なお、現在は第 1 部まで執筆を終えた状態ですが、いったんこの段階で公開しようと考えています。そのつもりでレビューしてください。
+このプロジェクト（zenn-content）の books ディレクトリには Zenn には電子書籍を公開するための原稿があります。
+
+learning-by-growing-language： 公開済みの原稿
+learning-by-growing-language-draft： 公開予定のドラフト原稿
+
+これらの原稿をレビューする際は、以下の観点とルールを厳格に守り、批判的な目で確認してフィードバックを行ってください。
+なお、現在は第 1 部まで公開し、第 2 部を learning-by-growing-language-draft で執筆中です。公開済みの内容と執筆中の内容が整合していることも確認してください。
 
 ## 前提知識
 
@@ -9,7 +14,6 @@
 
 * Zenn CLI 利用方法:https://zenn.dev/zenn/articles/zenn-cli-guide
 * Zenn の Markdown 記法 https://zenn.dev/zenn/articles/markdown-guide
-* 執筆中の内容や設定:/home/takahiro/projects/zenn-content/books/learning-by-growing-language
 * Toil 言語処理系のソースコード:/home/takahiro/projects/toil
 * サンプルコード https://github.com/koba925/toil-book
   * 節ごとのソースを参照できるようタグを打っています。
