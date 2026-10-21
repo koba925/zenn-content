@@ -4,10 +4,12 @@ description: 「育てて学ぶ はじめての自作プログラミング言語
 trigger: model_decision
 ---
 
-Toil を題材として書籍「[育てて学ぶ はじめての自作プログラミング言語](https://zenn.dev/kb84tkhr/books/learning-by-growing-language)」を執筆中です。まだドラフトですが、第 1 部を公開し、第 2 部を執筆中です。
+Toil を題材として書籍を執筆中です。
 
 * `books/learning-by-growing-language`： 公開済みの原稿
-* `books/learning-by-growing-language-draft`： 作成中・公開予定のドラフト原稿
+  公開先：[育てて学ぶ はじめての自作プログラミング言語 Book 1](https://zenn.dev/kb84tkhr/books/learning-by-growing-language)
+* `books/learning-by-growing-language-bk2`： 作成中で一部公開済みの原稿
+  公開先：[育てて学ぶ はじめての自作プログラミング言語 Book 2](https://zenn.dev/kb84tkhr/books/learning-by-growing-language-bk2)
 
 ## 関連プロジェクト
 
