@@ -4,30 +4,21 @@ description: 「育てて学ぶ はじめての自作プログラミング言語
 trigger: model_decision
 ---
 
-Toil を題材として書籍を執筆中です。
+Toil を題材とした書籍の執筆プロジェクトです。原稿は実装コードと常に整合している必要があります。
 
-* `books/learning-by-growing-language`： 公開済みの原稿
-  公開先：[育てて学ぶ はじめての自作プログラミング言語 Book 1](https://zenn.dev/kb84tkhr/books/learning-by-growing-language)
-* `books/learning-by-growing-language-bk2`： 作成中で一部公開済みの原稿
-  公開先：[育てて学ぶ はじめての自作プログラミング言語 Book 2](https://zenn.dev/kb84tkhr/books/learning-by-growing-language-bk2)
+## 対象・関連プロジェクト
 
-## 関連プロジェクト
+* Book 1（公開済み）: `books/learning-by-growing-language`（https://zenn.dev/kb84tkhr/books/learning-by-growing-language）
+* Book 2（一部公開中）: `books/learning-by-growing-language-bk2`（https://zenn.dev/kb84tkhr/books/learning-by-growing-language-bk2）
+* 処理系ソース: `/home/takahiro/projects/toil`（節ごと: `/home/takahiro/projects/toil/book`）
+* サンプルコード: https://github.com/koba925/toil-book （節ごとのタグ例: `0101_constants`）
 
-本書のソースコードは以下のプロジェクトにあります。本書の原稿と整合性が取れている必要があります。
+## 執筆の基本方針
 
-* Toil 言語処理系のソースコード: `/home/takahiro/projects/toil`
-  * 節ごとのソースコード: `/home/takahiro/projects/toil/books`
-* サンプルコード https://github.com/koba925/toil-book
-  * 節ごとのソースを参照できるようタグを打っています。
-    例： https://github.com/koba925/toil-book/tree/0101_constants
+* **ターゲット**: Python の基礎（リスト・辞書・クラス）は知っているが、言語処理系は初めての読者。
+* **スモールステップ・楽しさ優先**: 厳密さよりわかりやすさと達成感を優先。機能追加の順序・構成では、1 度に複数概念（字句解析・構文解析・評価、参照と代入など）を導入せず認知負荷を極限まで分散させる。
+* **トーン＆マナー**: 親しみやすい語り口とユーモアを保ち、各部・章・節末には次へのヒキを入れる。標準的な専門用語を用いつつ発展学習への注釈・コラムを適宜添える。
 
 ## セッション管理
 
-コンテキストの肥大化を防ぎ、高い精度で作業を行うため、以下のタイミングでチャットをクリアして新しいセッションに切り替えること。セッション終了時は `/lbgl-wrap-up-session`、開始時は `/lbgl-start-session` を活用する。
-
-1. **タスクの区切り**: 1 つの節（例：4.1 節など）の執筆やレビューが完了し、次の節へ移る時。
-2. **スコープの変更**:「原稿の執筆・推敲」から、Toil 言語本体の「Python コードの実装・デバッグ」などへ作業対象が大きく変わる時。
-
-## 執筆・レビュー方針
-
-* **学習負荷の分散（スモールステップ化）**: 機能追加の順序や構成について相談を受けた際は、一度に複数の概念（字句解析・構文解析・評価、あるいは参照と代入など）が導入されないよう、読者の認知負荷を極限まで分散させる「スモールステップ」の順序を意識して提案を行うこと。
+コンテキスト肥大化を防ぐため、**節の区切り**または**作業スコープ変更**（原稿執筆 ⇄ Python 実装など）のタイミングでセッションを切り替える。終了時に `/lbgl-wrap-up-session`、開始時に `/lbgl-start-session` を使用する。また、本ファイル・`books/lbgl-context.md`・`lbgl-review/SKILL.md` は役割を重複させず、完了済みログを削りながら常にコンパクトに保つこと。
